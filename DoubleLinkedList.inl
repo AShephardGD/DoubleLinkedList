@@ -4,12 +4,14 @@
 #include <iostream>
 #include <stdexcept>
 
-DoubleLinkedList::DoubleLinkedList() {
+template <typename T>
+DoubleLinkedList<T>::DoubleLinkedList() {
     _head = nullptr;
     _size = 0;
 }
 
-DoubleLinkedList::DoubleLinkedList(const DoubleLinkedList& other) {
+template <typename T>
+DoubleLinkedList<T>::DoubleLinkedList(const DoubleLinkedList& other) {
     _size = other._size;
     if (!other._head) {
         _head = nullptr;
@@ -29,14 +31,16 @@ DoubleLinkedList::DoubleLinkedList(const DoubleLinkedList& other) {
     cur->_prev = preCur;
 }
 
-DoubleLinkedList::DoubleLinkedList(DoubleLinkedList&& other) noexcept {
+template <typename T>
+DoubleLinkedList<T>::DoubleLinkedList(DoubleLinkedList&& other) noexcept {
     std::swap(_head, other._head);
     std::swap(_size, other._size);
 }
 
 
 
-DoubleLinkedList& DoubleLinkedList::operator=(const DoubleLinkedList& other) {
+template <typename T>
+DoubleLinkedList<T>& DoubleLinkedList<T>::operator=(const DoubleLinkedList& other) {
     delete _head;
     _size = other._size;
     if (!other._head) {
@@ -58,7 +62,8 @@ DoubleLinkedList& DoubleLinkedList::operator=(const DoubleLinkedList& other) {
     return *this;
 }
 
-DoubleLinkedList& DoubleLinkedList::operator=(DoubleLinkedList&& other) noexcept {
+template <typename T>
+DoubleLinkedList<T>& DoubleLinkedList<T>::operator=(DoubleLinkedList&& other) noexcept {
     std::swap(_head, other._head);
     std::swap(_size, other._size);
     delete other._head;
@@ -69,13 +74,15 @@ DoubleLinkedList& DoubleLinkedList::operator=(DoubleLinkedList&& other) noexcept
 
 
 
-DoubleLinkedList::~DoubleLinkedList() {
+template <typename T>
+DoubleLinkedList<T>::~DoubleLinkedList() {
     delete _head;
 }
 
 
 
-ValueType& DoubleLinkedList::operator[](const size_t pos) {
+template <typename T>
+T& DoubleLinkedList<T>::operator[](const size_t pos) {
     if (pos >= _size) {
         throw std::out_of_range("Out of DoubleLinkedList's range");
     }
@@ -86,7 +93,8 @@ ValueType& DoubleLinkedList::operator[](const size_t pos) {
     return res->_data;
 }
 
-const ValueType& DoubleLinkedList::operator[](const size_t pos) const {
+template <typename T>
+const T& DoubleLinkedList<T>::operator[](const size_t pos) const {
     if (pos >= _size) {
         throw std::out_of_range("Out of DoubleLinkedList's range");
     }
@@ -97,11 +105,13 @@ const ValueType& DoubleLinkedList::operator[](const size_t pos) const {
     return res->_data;
 }
 
-size_t DoubleLinkedList::size() const {
+template <typename T>
+size_t DoubleLinkedList<T>::size() const {
     return _size;
 }
 
-DoubleLinkedList::ListIterator DoubleLinkedList::getNode(const size_t pos) const {
+template <typename T>
+typename DoubleLinkedList<T>::ListIterator DoubleLinkedList<T>::getNode(const size_t pos) const {
     if (pos >= _size) {
         throw std::out_of_range("Out of DoubleLinkedList's range");
     }
@@ -114,7 +124,8 @@ DoubleLinkedList::ListIterator DoubleLinkedList::getNode(const size_t pos) const
 
 
 
-bool DoubleLinkedList::find(const ValueType& needle) const {
+template <typename T>
+bool DoubleLinkedList<T>::find(const T& needle) const {
     if (!_head) {
         return false;
     }
@@ -128,21 +139,25 @@ bool DoubleLinkedList::find(const ValueType& needle) const {
     return false;
 }
 
-bool DoubleLinkedList::isEmpty() const {
+template <typename T>
+bool DoubleLinkedList<T>::isEmpty() const {
     return !_head;
 }
 
 
 
-void DoubleLinkedList::pushBack(const ValueType& data) {
+template <typename T>
+void DoubleLinkedList<T>::pushBack(const T& data) {
     insert(data, size());
 }
 
-void DoubleLinkedList::pushFront(const ValueType& data) {
+template <typename T>
+void DoubleLinkedList<T>::pushFront(const T& data) {
     insert(data, 0);
 }
 
-void DoubleLinkedList::insert(const ValueType& data, size_t pos) {
+template <typename T>
+void DoubleLinkedList<T>::insert(const T& data, size_t pos) {
     ++_size;
     if (!_head) {
         _head = new Node(data);
@@ -170,27 +185,32 @@ void DoubleLinkedList::insert(const ValueType& data, size_t pos) {
     }
 }
 
-void DoubleLinkedList::insertAfter(const ValueType& data, DoubleLinkedList::ListIterator it) {
+template <typename T>
+void DoubleLinkedList<T>::insertAfter(const T& data, DoubleLinkedList::ListIterator it) {
     insert(data, it.getNodeIndex() + 1);
 }
 
 
 
-void DoubleLinkedList::clear() {
+template <typename T>
+void DoubleLinkedList<T>::clear() {
     delete _head;
     _head = nullptr;
     _size = 0;
 }
 
-void DoubleLinkedList::popBack() {
+template <typename T>
+void DoubleLinkedList<T>::popBack() {
     remove(size() - 1);
 }
 
-void DoubleLinkedList::popFront() {
+template <typename T>
+void DoubleLinkedList<T>::popFront() {
     remove(0);
 }
 
-void DoubleLinkedList::remove(size_t pos) {
+template <typename T>
+void DoubleLinkedList<T>::remove(size_t pos) {
     if (pos >= size()) {
         throw std::out_of_range("Out of DoubleLinkedList's range");
     }
@@ -219,17 +239,20 @@ void DoubleLinkedList::remove(size_t pos) {
     }
 }
 
-void DoubleLinkedList::removeAfter(DoubleLinkedList::ListIterator it) {
+template <typename T>
+void DoubleLinkedList<T>::removeAfter(DoubleLinkedList::ListIterator it) {
     remove(it.getNodeIndex() + 1);
 }
 
-void DoubleLinkedList::remove(DoubleLinkedList::ListIterator it) {
+template <typename T>
+void DoubleLinkedList<T>::remove(DoubleLinkedList::ListIterator it) {
     remove(it.getNodeIndex());
 }
 
 
 
-void DoubleLinkedList::print(std::ostream& stream) const {
+template <typename T>
+void DoubleLinkedList<T>::print(std::ostream& stream) const {
     if(!_head) {
         stream << "(nullptr)";
         return;
@@ -244,14 +267,16 @@ void DoubleLinkedList::print(std::ostream& stream) const {
 
 
 
-std::ostream& operator<<(std::ostream& stream, const DoubleLinkedList& list) {
+template <typename Type>
+std::ostream& operator<<(std::ostream& stream, const DoubleLinkedList<Type>& list) {
     list.print(stream);
     return stream;
 }
 
 
 
-void DoubleLinkedList::forEach(ValueType& (*fn)(ValueType&)) {
+template <typename T>
+void DoubleLinkedList<T>::forEach(T& (*fn)(T&)) {
     if (!_head) {
         return;
     }
@@ -262,13 +287,15 @@ void DoubleLinkedList::forEach(ValueType& (*fn)(ValueType&)) {
     } while (cur);
 }
 
-DoubleLinkedList DoubleLinkedList::map(ValueType& (*fn)(ValueType&)) const {
+template <typename T>
+DoubleLinkedList<T> DoubleLinkedList<T>::map(T& (*fn)(T&)) const {
     DoubleLinkedList list = *this;
     list.forEach(fn);
     return list;
 }
 
-void DoubleLinkedList::filter(bool (*fn)(ValueType&)) {
+template <typename T>
+void DoubleLinkedList<T>::filter(bool (*fn)(T&)) {
     if (!_head) {
         return;
     }
@@ -309,7 +336,8 @@ void DoubleLinkedList::filter(bool (*fn)(ValueType&)) {
 
 
 
-void DoubleLinkedList::reverse() {
+template <typename T>
+void DoubleLinkedList<T>::reverse() {
     if (!_head) {
         return;
     }
@@ -321,7 +349,8 @@ void DoubleLinkedList::reverse() {
     } while (cur);
 }
 
-void DoubleLinkedList::reverse(size_t start, size_t end) {
+template <typename T>
+void DoubleLinkedList<T>::reverse(size_t start, size_t end) {
     if (start >= size()) {
         throw std::out_of_range("Reverse() - Out of DoubleLinkedList's range");
     }
@@ -355,13 +384,15 @@ void DoubleLinkedList::reverse(size_t start, size_t end) {
     }
 }
 
-DoubleLinkedList DoubleLinkedList::getReverseList() const {
+template <typename T>
+DoubleLinkedList<T> DoubleLinkedList<T>::getReverseList() const {
     DoubleLinkedList list = *this;
     list.reverse();
     return list;
 }
 
-DoubleLinkedList DoubleLinkedList::getReverseList(size_t start, size_t end) const {
+template <typename T>
+DoubleLinkedList<T> DoubleLinkedList<T>::getReverseList(size_t start, size_t end) const {
     DoubleLinkedList list = *this;
     list.reverse(start, end);
     return list;
@@ -369,61 +400,75 @@ DoubleLinkedList DoubleLinkedList::getReverseList(size_t start, size_t end) cons
 
 
 
-DoubleLinkedList::ListIterator DoubleLinkedList::begin() const {
+template <typename T>
+typename DoubleLinkedList<T>::ListIterator DoubleLinkedList<T>::begin() const {
     return DoubleLinkedList::ListIterator(_head, 0);
 }
 
-DoubleLinkedList::ListIterator DoubleLinkedList::end() const {
+template <typename T>
+typename DoubleLinkedList<T>::ListIterator DoubleLinkedList<T>::end() const {
     return DoubleLinkedList::ListIterator(nullptr, size());
 }
 
 
 
-DoubleLinkedList::Node::Node(const ValueType& data)  {
+template <typename T>
+DoubleLinkedList<T>::Node::Node(const T& data)  {
     _data = data;
     _next = nullptr;
     _prev = nullptr;
 }
 
-DoubleLinkedList::Node::~Node() {
+template <typename T>
+DoubleLinkedList<T>::Node::~Node() {
     delete _next;
 }
 
 
-DoubleLinkedList::ListIterator::ListIterator(Node* ptr, size_t index) : _ptr(ptr), _index(index) {}
 
-ValueType& DoubleLinkedList::ListIterator::operator*() {
+template <typename T>
+DoubleLinkedList<T>::ListIterator::ListIterator(Node* ptr, size_t index) : _ptr(ptr), _index(index) {}
+
+template <typename T>
+T& DoubleLinkedList<T>::ListIterator::operator*() {
     return _ptr->_data;
 }
 
-ValueType* DoubleLinkedList::ListIterator::operator->() {
+template <typename T>
+T* DoubleLinkedList<T>::ListIterator::operator->() {
     return &(_ptr->_data);
 }
 
-DoubleLinkedList::ListIterator& DoubleLinkedList::ListIterator::operator++() {
+template <typename T>
+typename DoubleLinkedList<T>::ListIterator& DoubleLinkedList<T>::ListIterator::operator++() {
     _ptr = _ptr->_next;
     ++_index;
     return *(this);
 }
 
-DoubleLinkedList::ListIterator DoubleLinkedList::ListIterator::operator++(int notUsed) {
+template <typename T>
+typename DoubleLinkedList<T>::ListIterator DoubleLinkedList<T>::ListIterator::operator++(int notUsed) {
     ListIterator tmp = *this;
     ++(*this);
     return tmp;
 }
 
-bool DoubleLinkedList::ListIterator::operator!=(DoubleLinkedList::ListIterator& other) {
+template <typename T>
+bool DoubleLinkedList<T>::ListIterator::operator!=(DoubleLinkedList::ListIterator& other) {
     return _ptr != other._ptr;
 }
 
-bool DoubleLinkedList::ListIterator::operator==(DoubleLinkedList::ListIterator& other) {
+template <typename T>
+bool DoubleLinkedList<T>::ListIterator::operator==(DoubleLinkedList::ListIterator& other) {
     return _ptr == other._ptr;
 }
 
-std::ptrdiff_t DoubleLinkedList::ListIterator::operator-(DoubleLinkedList::ListIterator& other) {
+template <typename T>
+std::ptrdiff_t DoubleLinkedList<T>::ListIterator::operator-(DoubleLinkedList::ListIterator& other) {
     return _ptr - other._ptr;
 }
 
-size_t DoubleLinkedList::ListIterator::getNodeIndex() const {
+template <typename T>
+size_t DoubleLinkedList<T>::ListIterator::getNodeIndex() const {
     return _index;
 }
